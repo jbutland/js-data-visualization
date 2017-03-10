@@ -112,7 +112,7 @@ class JS_Data_Visualization {
 		 * The class responsible for defining all actions that occur in the admin area.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-js-data-visualization-admin.php';
-		
+
 		/**
 		 * The class responsible for defining all actions that occur in the public-facing
 		 * side of the site.
@@ -152,7 +152,11 @@ class JS_Data_Visualization {
 		$plugin_admin = new JS_Data_Visualization_Admin( $this->get_js_data_visualization(), $this->get_version() );
 		$this->loader->add_action( 'admin_menu', $plugin_admin, 'jsdv_menu' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/data-classes/class-js-data-visualization-get.php';
+		$instance_class = new JS_Data_Visualization_Get_Data;
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
+		$this->loader->add_action( 'wp_ajax_nopriv_your_action', $plugin_admin, 'load_questions' );
+    $this->loader->add_action( 'wp_ajax_your_action', $plugin_admin, 'get_instance_questions' );
 
 
 	}
