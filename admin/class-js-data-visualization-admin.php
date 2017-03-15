@@ -3,7 +3,7 @@
 /**
  * The admin-specific functionality of the plugin.
  *
- * @link              http://github.com/jbutland/js-data-visulization
+ * @link       http://github.com/jbutland/js-data-visulization
  * @since      1.0.0
  *
  * @package    JS_Data_Visualization
@@ -82,7 +82,9 @@ class JS_Data_Visualization_Admin {
 	public function enqueue_scripts() {
 
 		wp_enqueue_script( $this->js_data_visualization, plugin_dir_url( __FILE__ ) . 'js/js-data-visualization-admin.js', array( 'jquery' ), $this->version, false );
-		wp_localize_script( $this->js_data_visualization, 'js_data_visualization' , array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
+		wp_enqueue_script( 'Chart.js', plugin_dir_url( __FILE__ ) . 'js/Chart.js/Chart.bundle.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script( 'utils.js', plugin_dir_url( __FILE__ ) . 'js/Chart.js/utils.js', array( 'jquery' ), $this->version, false );
+		//wp_localize_script( $this->js_data_visualization, 'js_data_visualization' , array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
 
 	}
 

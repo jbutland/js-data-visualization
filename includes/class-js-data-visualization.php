@@ -153,10 +153,12 @@ class JS_Data_Visualization {
 		$this->loader->add_action( 'admin_menu', $plugin_admin, 'jsdv_menu' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/data-classes/class-js-data-visualization-get.php';
-		$instance_class = new JS_Data_Visualization_Get_Data;
+		$data_get  = new JS_Data_Visualization_Get_Data;
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
-		$this->loader->add_action( 'wp_ajax_nopriv_your_action', $plugin_admin, 'load_questions' );
-    $this->loader->add_action( 'wp_ajax_your_action', $plugin_admin, 'get_instance_questions' );
+		$this->loader->add_action( 'wp_ajax_nopriv_get_instance_questions', $data_get, 'get_instance_questions' );
+    	$this->loader->add_action( 'wp_ajax_get_instance_questions', $data_get, 'get_instance_questions' );
+		$this->loader->add_action( 'wp_ajax_nopriv_populate_chart', $data_get, 'populate_chart' );
+		$this->loader->add_action( 'wp_ajax_populate_chart', $data_get, 'populate_chart' );
 
 
 	}

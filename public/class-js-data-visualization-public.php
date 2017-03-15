@@ -97,6 +97,7 @@ class JS_Data_Visualization_Public {
 		 */
 
 		wp_enqueue_script( $this->js_data_visualization, plugin_dir_url( __FILE__ ) . 'js/js-data-visualization-public.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script( 'Chart.js_public', plugin_dir_url( __FILE__ ) . 'js/Chart.js/Chart.js', array( 'jquery' ), $this->version, false );
 
 	}
 
