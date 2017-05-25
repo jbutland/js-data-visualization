@@ -22,7 +22,7 @@
    {
       //echo $key." ".$value;
       $questions_array[$i]['id'] = $option->id;
-      $questions_array[$i]['segments'] = $option->segments;
+      //$questions_array[$i]['segments'] = $option->segments;
       $questions_array[$i]['type'] = $option->type;
       $i++;
    }
