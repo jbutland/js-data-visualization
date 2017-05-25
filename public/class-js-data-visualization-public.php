@@ -52,26 +52,31 @@ class JS_Data_Visualization_Public {
 		$this->js_data_visualization = $js_data_visualization;
 		$this->version = $version;
 
+
 	}
+
+	public function get_chart( $atts ){
+	   $instance_id = $atts['id'];
+	   echo $instce_id;
+	}
+
 
 	/**
 	 * Register the stylesheets for the public-facing side of the site.
 	 *
 	 * @since    1.0.0
 	 */
+	public function get_public_chart( $atts ){
+		ob_start();
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/partials/js-data-visualization-public-display.php';
+		$ReturnString = ob_get_contents();
+		ob_end_clean();
+    	return $ReturnString;
+
+ 	}
+
 	public function enqueue_styles() {
 
-		/**
-		 * This function is provided for demonstration purposes only.
-		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in JS_Data_Visualization_Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The JS_Data_Visualization_Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
-		 */
 
 		wp_enqueue_style( $this->js_data_visualization, plugin_dir_url( __FILE__ ) . 'css/js-data-visualization-public.css', array(), $this->version, 'all' );
 
@@ -84,21 +89,15 @@ class JS_Data_Visualization_Public {
 	 */
 	public function enqueue_scripts() {
 
-		/**
-		 * This function is provided for demonstration purposes only.
-		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in JS_Data_Visualization_Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The JS_Data_Visualization_Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
-		 */
-
 		wp_enqueue_script( $this->js_data_visualization, plugin_dir_url( __FILE__ ) . 'js/js-data-visualization-public.js', array( 'jquery' ), $this->version, false );
-		wp_enqueue_script( 'Chart.js_public', plugin_dir_url( __FILE__ ) . 'js/Chart.js/Chart.js', array( 'jquery' ), $this->version, false );
+		wp_localize_script( $this->js_data_visualization, 'MyAjax' , array( 'ajaxurl' => admin_url( 'admin-ajax.php' ), 'nonce' => wp_create_nonce( 'ajax-example-nonce' ) ) );
+		wp_enqueue_script( 'Chart.js', plugin_dir_url( __DIR__ ) . 'shared-files/js/Chart.js/Chart.bundle.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script( 'utils.js', plugin_dir_url( __DIR__ ) . 'shared-files/js/Chart.js/utils.js', array( 'jquery' ), $this->version, false );
 
+
+	}
+	public function register_shortcodes(){
+		add_shortcode( 'js-data-visualization', array($this,'get_public_chart' ));
 	}
 
 }

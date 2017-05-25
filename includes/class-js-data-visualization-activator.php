@@ -39,6 +39,7 @@ class JS_Data_Visualization_Activator {
 		$sql = "CREATE TABLE $table_name (
   	instance_id int(10) NOT NULL AUTO_INCREMENT,
  		instance_name varchar(55) DEFAULT '' NOT NULL,
+		instance_options text,
   	PRIMARY KEY  (instance_id)
 		) $charset_collate;";
 		dbDelta( $sql );

@@ -11,8 +11,8 @@
  * @package    JS_Data_Visualization
  * @subpackage JS_Data_Visualization/admin/partials
  */
-require_once plugin_dir_path( dirname( __FILE__ ) ) . 'data-classes/class-js-data-visualization-import.php';
-//require_once plugin_dir_path( dirname( __FILE__ ) ) . 'data-classes/class-js-data-visualization-get.php';
+require_once plugin_dir_path( dirname( __DIR__ ) ) . 'shared-files/data-classes/class-js-data-visualization-import.php';
+//require_once plugin_dir_path( dirname( __FILE__ ) ) . 'shared-files/data-classes/class-js-data-visualization-get.php';
         $import = new JS_Data_Visualization_Import_Data;
         $result = $import->handle_post();
         $instance_class = new JS_Data_Visualization_Get_Data;
@@ -46,7 +46,7 @@ require_once plugin_dir_path( dirname( __FILE__ ) ) . 'data-classes/class-js-dat
         <?php } ?>
         </select>
   </div>
-  <form id="questions_display">
+  <form id="questions_display" method="post">
 
   </form>
 <?php

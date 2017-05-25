@@ -31,9 +31,9 @@ class JS_Data_Visualization_Deactivator {
 	 */
 	public static function deactivate() {
 		global $wpdb;
-		$wpdb->query( "DROP TABLE IF EXISTS wp_jsdv_instance" );
-		$wpdb->query( "DROP TABLE IF EXISTS wp_jsdv_instance_row" );
-		$wpdb->query( "DROP TABLE IF EXISTS wp_jsdv_instance_row_values" );
+		//$wpdb->query( "DROP TABLE IF EXISTS wp_jsdv_instance" );
+		//$wpdb->query( "DROP TABLE IF EXISTS wp_jsdv_instance_row" );
+		//$wpdb->query( "DROP TABLE IF EXISTS wp_jsdv_instance_row_values" );
 	}
 
 }
