@@ -81,10 +81,6 @@
                         if (returned.chart_type == "pie") {
                            if(returned.values != null)
                            {
-                               var sum = returned.values.reduce(add, 0);
-                               returned.values = returned.values.map(function(x) {
-                                   return x / sum * 100;
-                               });
                                var count = returned.values.length;
                                var colorArray = getRandomColors(count);
                            }
