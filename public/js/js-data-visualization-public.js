@@ -1,6 +1,7 @@
 (function($) {
     'use strict';
     $(document).ready(function() {
+      if ($('#canvas').length > 0) {
         var config = {
             type: 'bar',
             data: {
@@ -60,7 +61,7 @@
             var chartTitle = $(".question option:selected").text();
             var populateData = $("#populate_chart").serialize();
 				$(".fadeMe").show();
-            console.log(populateData);
+            //console.log(populateData);
             $.ajax({
                 url: MyAjax.ajaxurl,
                 type: 'POST',
@@ -78,32 +79,52 @@
                     //console.log(returned);
                     if (returned != null) {
                         if (returned.chart_type == "pie") {
-                            var sum = returned.values.reduce(add, 0);
-                            returned.values = returned.values.map(function(x) {
-                                return x / sum * 100;
-                            });
-                            var count = returned.values.length;
-                            var colorArray = getRandomColors(count);
+                           if(returned.values != null)
+                           {
+                               var sum = returned.values.reduce(add, 0);
+                               returned.values = returned.values.map(function(x) {
+                                   return x / sum * 100;
+                               });
+                               var count = returned.values.length;
+                               var colorArray = getRandomColors(count);
+                           }
 
-                            config = {
-                                type: returned.chart_type,
-                                data: {
-                                    datasets: [{
-                                        data: returned.values,
-                                        backgroundColor: colorArray,
-                                        borderColor: colorArray,
-                                        label: 'Dataset 1'
-                                    }],
-                                    labels: returned.keys
-                                },
-                                options: {
-                                    responsive: true,
-                                    title: {
-                                        display: true,
-                                        text: chartTitle
+
+
+                           config = {
+                              type: returned.chart_type,
+                              data: {
+                                 datasets: [{
+                                    data: returned.values,
+                                    backgroundColor: colorArray,
+                                    borderColor: colorArray,
+                                    label: 'Dataset 1'
+                                 }],
+                                 labels: returned.keys
+                              },
+                              options: {
+                                 responsive: true,
+                                 title: {
+                                    display: true,
+                                    text: chartTitle
+                                 },
+                                 tooltips: {
+                                    callbacks: {
+                                       label: function(tooltipItem, data) {
+                                          var allData = data.datasets[tooltipItem.datasetIndex].data;
+                                          var tooltipLabel = data.labels[tooltipItem.index];
+                                          var tooltipData = allData[tooltipItem.index];
+                                          var total = 0;
+                                          for (var i in allData) {
+                                             total += allData[i];
+                                          }
+                                          var tooltipPercentage = Math.round((tooltipData / total) * 100);
+                                          return tooltipLabel + ': ' + tooltipData + ' (' + tooltipPercentage + '%)';
+                                       }
                                     }
-                                }
-                            };
+                                 }
+                              }
+                           };
                             //console.log(config);
                         } else {
 
@@ -267,9 +288,13 @@
                 }
             });
         });
-	 $(".question").trigger( "change");
-    $("#populate_chart").trigger( "change");
 
+        if ($('#populate_chart').length > 0) {
+           $(".question").trigger( "change");
+           $("#populate_chart").trigger( "change");
+        }
+
+}
     });
 
 

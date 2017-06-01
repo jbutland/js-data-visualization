@@ -148,19 +148,39 @@ class JS_Data_Visualization {
 	 * @access   private
 	 */
 	private function define_admin_hooks() {
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'shared-files/data-classes/class-js-data-visualization-import.php';
 
-		$plugin_admin = new JS_Data_Visualization_Admin( $this->get_js_data_visualization(), $this->get_version() );
-		$this->loader->add_action( 'admin_menu', $plugin_admin, 'jsdv_menu' );
-		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'shared-files/data-classes/class-js-data-visualization-get.php';
 		$data_get  = new JS_Data_Visualization_Get_Data;
+
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'shared-files/data-classes/class-js-data-visualization-set.php';
+		$data_set  = new JS_Data_Visualization_Set_Data;
+
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'shared-files/data-classes/class-js-data-visualization-get-chart.php';
+		$chart_get  = new JS_Data_Visualization_Get_Chart;
+
+		$plugin_admin = new JS_Data_Visualization_Admin( $this->get_js_data_visualization(),
+
+		$this->get_version() );
+
+		$this->loader->add_action( 'admin_menu', $plugin_admin, 'jsdv_menu' );
+		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
-		$this->loader->add_action( 'wp_ajax_nopriv_get_instance_questions', $data_get, 'get_instance_questions' );
-    	$this->loader->add_action( 'wp_ajax_get_instance_questions', $data_get, 'get_instance_questions' );
-		$this->loader->add_action( 'wp_ajax_nopriv_populate_chart', $data_get, 'populate_chart' );
-		$this->loader->add_action( 'wp_ajax_populate_chart', $data_get, 'populate_chart' );
-		$this->loader->add_action( 'wp_ajax_nopriv_parse_chart_options', $data_get, 'parse_chart_options' );
-		$this->loader->add_action( 'wp_ajax_parse_chart_options', $data_get, 'parse_chart_options' );
+
+		$this->loader->add_action( 'wp_ajax_nopriv_get_instance_questions', $data_set, 'get_instance_questions' );
+    	$this->loader->add_action( 'wp_ajax_get_instance_questions', $data_set, 'get_instance_questions' );
+
+		$this->loader->add_action( 'wp_ajax_nopriv_initilaizeAdminChart', $chart_get, 'initilaizeAdminChart' );
+		$this->loader->add_action( 'wp_ajax_initilaizeAdminChart', $chart_get, 'initilaizeAdminChart' );
+
+		$this->loader->add_action( 'wp_ajax_nopriv_populate_chart', $chart_get, 'populate_chart' );
+		$this->loader->add_action( 'wp_ajax_populate_chart', $chart_get, 'populate_chart' );
+
+		$this->loader->add_action( 'wp_ajax_nopriv_parse_chart_options', $data_set, 'parse_chart_options' );
+		$this->loader->add_action( 'wp_ajax_parse_chart_options', $data_set, 'parse_chart_options' );
+
+		$this->loader->add_action( 'wp_ajax_populate_segments', $chart_get, 'populate_segments' );
+		$this->loader->add_action( 'wp_ajax_nopriv_populate_segments', $chart_get, 'populate_segments' );
 
 
 	}
@@ -175,21 +195,21 @@ class JS_Data_Visualization {
 	private function define_public_hooks() {
 
 		$plugin_public = new JS_Data_Visualization_Public( $this->get_js_data_visualization(), $this->get_version() );
-
+		$this->loader->add_action( 'init', $plugin_public, 'register_shortcodes' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
-		$this->loader->add_action( 'init', $plugin_public, 'register_shortcodes' );
+		//require_once plugin_dir_path( dirname( __FILE__ ) ) . 'shared-files/data-classes/class-js-data-visualization-get.php';
+		//$data_get  = new JS_Data_Visualization_Get_Data;
 
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'shared-files/data-classes/class-js-data-visualization-get.php';
-
-		$data_get  = new JS_Data_Visualization_Get_Data;
-
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'shared-files/data-classes/class-js-data-visualization-get-chart.php';
+		$chart_get  = new JS_Data_Visualization_Get_Chart;
 		if ( is_admin() ) {
-			$this->loader->add_action( 'wp_ajax_populate_chart', $data_get, 'populate_chart' );
-			$this->loader->add_action( 'wp_ajax_nopriv_populate_chart', $data_get, 'populate_chart' );
-			$this->loader->add_action( 'wp_ajax_populate_segments', $data_get, 'populate_segments' );
-			$this->loader->add_action( 'wp_ajax_nopriv_populate_segments', $data_get, 'populate_segments' );
+			$this->loader->add_action( 'wp_ajax_populate_chart', $chart_get, 'populate_chart' );
+			$this->loader->add_action( 'wp_ajax_nopriv_populate_chart', $chart_get, 'populate_chart' );
+			$this->loader->add_action( 'wp_ajax_populate_segments', $chart_get, 'populate_segments' );
+			$this->loader->add_action( 'wp_ajax_nopriv_populate_segments', $chart_get, 'populate_segments' );
 		}
+
 	}
 
 	/**

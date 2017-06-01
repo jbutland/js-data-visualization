@@ -29,6 +29,8 @@ class JS_Data_Visualization_Public {
 	 * @access   private
 	 * @var      string    $js_data_visualization    The ID of this plugin.
 	 */
+	public $instance_id;
+
 	private $js_data_visualization;
 
 	/**
@@ -68,7 +70,9 @@ class JS_Data_Visualization_Public {
 	 */
 	public function get_public_chart( $atts ){
 		ob_start();
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/partials/js-data-visualization-public-display.php';
+		$instance_id = $atts['id'];
+	   $this->chart_get = new JS_Data_Visualization_Get_Chart;
+		$this->chart_get->initilaizePublicChart($instance_id);
 		$ReturnString = ob_get_contents();
 		ob_end_clean();
     	return $ReturnString;

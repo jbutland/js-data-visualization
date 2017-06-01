@@ -2,28 +2,23 @@
  * All of the CSS for your public-facing functionality should be
  * included in this file.
  */
-#segments {
-   margin-top: 10px;
-}
-#chart_info{
-   background-color: #383838;
-}
+
 .question {
-    margin-top: 5px;
+    margin-top: 0px;
 }
 .segment {
-    margin-top: 5px;
+    margin-top: 0px;
 }
 .control_label{
    margin-right:5px;
 }
 .chart_label{
-   margin-top:10px;
-   margin-bottom:10px;
+   margin-bottom:5px;
+   display:block;
 }
 #chart_description{
    width:100%;
-   background-color: #383838;
+   background-color: #474747;
 }
 
 #chart_and_info{
@@ -37,16 +32,19 @@
    float:left;
 }
 #chart_info{
+   background-color: #474747;
    width:25%;
    float:right;
 }
 
 #chart_control{
    width:100%;
-   padding-top:10px;
-   display:block;
+   padding-top:5px;
+   display: inline-block;
+
 }
 .info{
+   color: #FFFFFF;
    padding-left: 5px;
    margin-bottom: 3px;
 }
@@ -66,7 +64,25 @@
    width: 100%;
   height: 100%;
   position: relative;
-  display: block;
+  display: inline-block;
+
+}
+#questions{
+   background-color: #c4c4c4;
+   width:75%;
+   padding-top: 10px;
+   padding-left: 5px;
+   padding-right: 5px;
+   padding-bottom: 10px;
+}
+#segments{
+
+   background-color: #c4c4c4;
+   width:75%;
+   padding-top: 10px;
+   padding-left: 5px;
+   padding-right: 5px;
+   padding-bottom: 10px;
 
 }
 @media screen and (max-width: 500px) {
@@ -77,6 +93,17 @@
    }
 
    #chart_info{
+      width:100%;
+      float:left;
+   }
+
+   #questions{
+
+      width:100%;
+      float:left;
+   }
+
+   #segments{
       width:100%;
       float:left;
    }

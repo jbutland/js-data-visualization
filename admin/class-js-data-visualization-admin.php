@@ -61,6 +61,10 @@ class JS_Data_Visualization_Admin {
 
 
 	public function jsdv_plugin_options() {
+		$import = new JS_Data_Visualization_Import_Data;
+		$result = $import->handle_post();
+		$instance_class = new JS_Data_Visualization_Get_Data;
+		$instances = $instance_class->get_instances();
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/partials/js-data-visualization-admin-display.php';
 	}
 	/**

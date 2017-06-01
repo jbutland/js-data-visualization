@@ -1,267 +1,399 @@
 (function($) {
-    'use strict';
-    $(document).ready(function() {
-        var config = {
+   'use strict';
+   $(document).ready(function() {
+
+
+
+      $('#instances').change(function() {
+         var optionSelected = $(this).find("option:selected");
+         var valueSelected = optionSelected.val();
+         var textSelected = optionSelected.text();
+
+         $.ajax({
+            url: ajaxurl,
+            type: 'POST',
+            data: {
+               'instance_id': valueSelected,
+               'action': 'get_instance_questions'
+            },
+            success: function(data) {
+               $('#questions_display').html(data);
+               if ($('#saved').val() == 'yes') {
+                  initializeAdminChart(valueSelected)
+
+               }
+            },
+            error: function(errorThrown) {
+               console.log(errorThrown);
+            }
+         });
+
+
+      });
+
+      $("#questions_display").submit(function() {
+
+         var displayValues = $(this).serialize();
+         $.ajax({
+            url: ajaxurl,
+            type: 'POST',
+            data: {
+               'settings_data': displayValues,
+               'action': 'parse_chart_options'
+            },
+            success: function(data) {
+               //$('#test_chart').html(data);
+               console.log(data);
+               initializeAdminChart(data);
+               //$("#populate_chart").trigger('change');
+
+            },
+            error: function(errorThrown) {
+               console.log(errorThrown);
+            }
+         });
+         return false;
+      });
+
+      function initializeAdminChart(valueSelected) {
+         $.ajax({
+            url: ajaxurl,
+            type: 'POST',
+            data: {
+               'instance_id': valueSelected,
+               'action': 'initilaizeAdminChart'
+            },
+            success: function(data) {
+               $('#chart_home').html(data);
+               chartInit();
+               $("#populate_chart").trigger("change");
+
+            },
+            error: function(errorThrown) {
+               console.log(errorThrown);
+            }
+         });
+      }
+
+      function chartInit() {
+         var config = {
             type: 'bar',
             data: {
-                labels: ["January", "February", "March", "April", "May", "June", "July"],
-                datasets: [{
-                    //label: "Unfilled",
-                    fill: false,
-                    backgroundColor: '#000000',
-                    borderColor: '#ff0000',
-                    data: [
-                        randomScalingFactor(),
-                        randomScalingFactor(),
-                        randomScalingFactor(),
-                        randomScalingFactor(),
-                        randomScalingFactor(),
-                        randomScalingFactor(),
-                        randomScalingFactor()
-                    ]
-                }]
+               labels: [],
+               datasets: [{
+                  //label: "Unfilled",
+                  fill: false,
+                  backgroundColor: '#000000',
+                  borderColor: '#ff0000',
+                  data: []
+               }]
             },
             options: {
-                responsive: true,
-                title: {
-                    display: true,
-                    text: 'Chart.js Line Chart'
-                },
-                tooltips: {
-                    mode: 'index',
-                    intersect: false,
-                },
-                hover: {
-                    mode: 'nearest',
-                    intersect: true
-                },
-                scales: {
-                    xAxes: [{
+               legend: {
+                  display: false
+               },
+               responsive: true,
+               title: {
+                  display: true,
+                  text: ''
+               },
+               tooltips: {
+                  mode: 'index',
+                  intersect: false,
+               },
+               hover: {
+                  mode: 'nearest',
+                  intersect: true
+               },
+               scales: {
+                  xAxes: [{
+                     display: true,
+                     scaleLabel: {
+                        display: false,
+                        labelString: ''
+                     }
+                  }],
+                  yAxes: [{
+                     display: true,
+                     scaleLabel: {
                         display: true,
-                        scaleLabel: {
-                            display: false,
-                            labelString: 'Month'
-                        }
-                    }],
-                    yAxes: [{
-                        display: true,
-                        scaleLabel: {
-                            display: true,
-                            labelString: 'Number of Respondents'
-                        },
-                        ticks: {
-                            suggestedMin: 0, // minimum will be 0, unless there is a lower value.
+                        labelString: 'Number of Respondents'
+                     },
+                     ticks: {
+                        suggestedMin: 0, // minimum will be 0, unless there is a lower value.
 
-                        }
-                    }]
-                }
+                     }
+                  }]
+               }
             }
-        };
-
-        var ctx = $("#canvas");
-        var myChart = new Chart(ctx, config);
-
-
-        $('#instances').change(function() {
-            var optionSelected = $(this).find("option:selected");
-            var valueSelected = optionSelected.val();
-            var textSelected = optionSelected.text();
-
-            $.ajax({
-                url: ajaxurl,
-                type: 'POST',
-                data: {
-                    'instance_id': valueSelected,
-                    'action': 'get_instance_questions'
-                },
-                success: function(data) {
-                    $('#questions_display').html(data);
-                },
-                error: function(errorThrown) {
-                    console.log(errorThrown);
-                }
-            });
-
-
-        });
-        /*$("#questions_display").change(function() {
-           const data = new FormData('questions_display');
-           console.log(Array.from(data));
-            var displayValues = $(this).serializeArray();
-            console.log(displayValues);
-            var options;
-            var hiddenInstance = $('#instances').val();
-            var instanceField = '<input type="hidden" name="instance_id" value="' + hiddenInstance + '"/>';
-            displayValues.forEach(function(entry) {
-                options += '<option  value="' + entry['value'] + '">' + entry['name'] + '</option>';
-            });
-            $('#populate_chart').html('<select class="question" name="question">' + options + '</select>' + instanceField);
-        });*/
-        $("#questions_display").submit(function() {
-
-            var displayValues = $(this).serialize();
-            //console.log(displayValues);
-            /*var options;
-            var hiddenInstance = $('#instances').val();
-            var instanceField = '<input type="hidden" name="instance_id" value="' + hiddenInstance + '"/>';
-             displayValues.forEach(function(entry) {
-                 options += '<option  value="' + entry['value'] + '">' + entry['name'] + '</option>';
-             });
-             $('#populate_chart').html('<select class="question" name="question">' + options + '</select>' + instanceField);*/
-            $.ajax({
-                url: ajaxurl,
-                type: 'POST',
-                data: {
-                    'settings_data': displayValues,
-                    'action': 'parse_chart_options'
-                },
-                success: function(data) {
-                    $('#populate_chart').html(data);
-                    //console.log(data);
-                },
-                error: function(errorThrown) {
-                    console.log(errorThrown);
-                }
-            });
-            return false;
-        });
-
-        $("#populate_chart").change(function() {
+         };
+         if ($('#canvas').length > 0) {
+            var ctx = $("#canvas");
+            var myChart = new Chart(ctx, config);
+            myChart.destroy();
+            $(".fadeMe").hide();
+         }
+         $("#populate_chart").on('change', function() {
             var chartTitle = $(".question option:selected").text();
+            var populateData = $("#populate_chart").serialize();
+            $(".fadeMe").show();
+            //console.log(populateData);
+            $.ajax({
+               url: ajaxurl,
+               type: 'POST',
+               data: {
+                  'chart_data': populateData,
+                  'action': 'populate_chart'
+               },
+               dataType: 'json',
+               success: function(data) {
+                  //alert(data);
+                  //$('#questions_display').html(data);
+
+                  myChart.destroy();
+                  var returned = data;
+                  //console.log(returned);
+                  if (returned != null) {
+                     if (returned.chart_type == "pie") {
+                        if (returned.values != null) {
+                           //var sum = returned.values.reduce(add, 0);
+                           //returned.values = returned.values.map(function(x) {
+                           //return x / sum * 100;
+                           //});
+                           var count = returned.values.length;
+                           var colorArray = getRandomColors(count);
+                        }
+
+
+
+                        config = {
+                           type: returned.chart_type,
+                           data: {
+                              datasets: [{
+                                 data: returned.values,
+                                 backgroundColor: colorArray,
+                                 borderColor: colorArray,
+                                 label: 'Dataset 1'
+                              }],
+                              labels: returned.keys
+                           },
+                           options: {
+                              responsive: true,
+                              title: {
+                                 display: true,
+                                 text: chartTitle
+                              },
+                              tooltips: {
+                                 callbacks: {
+                                    label: function(tooltipItem, data) {
+                                       var allData = data.datasets[tooltipItem.datasetIndex].data;
+                                       var tooltipLabel = data.labels[tooltipItem.index];
+                                       var tooltipData = allData[tooltipItem.index];
+                                       var total = 0;
+                                       for (var i in allData) {
+                                          total += allData[i];
+                                       }
+                                       var tooltipPercentage = Math.round((tooltipData / total) * 100);
+                                       return tooltipLabel + ': ' + tooltipData + ' (' + tooltipPercentage + '%)';
+                                    }
+                                 }
+                              }
+                           }
+                        };
+                        //console.log(config);
+                     } else {
+
+                        config = {
+                           type: returned.chart_type,
+                           data: {
+                              labels: returned.keys,
+                              datasets: [{
+                                 //label: "Unfilled",
+                                 fill: false,
+                                 backgroundColor: '#ff0000',
+                                 borderColor: '#000000',
+                                 data: returned.values
+                              }]
+                           },
+                           options: {
+                              legend: {
+                                 display: false
+                              },
+                              responsive: true,
+                              title: {
+                                 display: true,
+                                 text: chartTitle
+                              },
+                              tooltips: {
+                                 mode: 'index',
+                                 intersect: false,
+                                 callbacks: {
+                                    label: function(tooltipItems, data) {
+                                       return tooltipItems.yLabel + ' responses';
+                                    }
+                                 }
+                              },
+                              hover: {
+                                 mode: 'nearest',
+                                 intersect: true
+                              },
+                              scales: {
+                                 xAxes: [{
+                                    display: true,
+                                    scaleLabel: {
+                                       display: false,
+                                    }
+                                 }],
+                                 yAxes: [{
+                                    display: true,
+                                    scaleLabel: {
+                                       display: true,
+                                       labelString: 'Number of Respondents'
+                                    },
+                                    ticks: {
+                                       suggestedMin: 0,
+                                    }
+                                 }]
+                              }
+                           }
+                        };
+
+                     }
+                     var info = '<p class="info">Chart Info </p>';
+
+                     if (returned.count != null) {
+                        info += '<p class="info">Number of Responses: ' + returned.count + '</p>';
+                     }
+                     if (returned.mean != null) {
+                        info += '<p class="info">Mean: ' + returned.mean + '</p>';
+                     }
+                     if (returned.median != null) {
+                        info += '<p class="info">Median: ' + returned.median + '</p>';
+                     }
+                     if (returned.mode != null) {
+                        info += '<p class="info">Mode: ' + returned.mode + '</p>';
+                     }
+                     if (returned.st_dev != null) {
+                        info += '<p class="info">Standard Deviation: ' + returned.st_dev.toFixed(2) + '</p>';
+                     }
+                     $('#chart_info').html(info);
+                     //ctx = $("#canvas");
+                     myChart = new Chart(ctx, config);
+                  } else {
+                     config = {
+                        type: 'bar',
+                        data: {
+                           labels: [],
+                           datasets: [{
+                              //label: "Unfilled",
+                              fill: false,
+                              backgroundColor: '#000000',
+                              borderColor: '#ff0000',
+                              data: []
+                           }]
+                        },
+                        options: {
+                           legend: {
+                              display: false
+                           },
+                           responsive: true,
+                           maintainAspectRatio: false,
+                           title: {
+                              display: true,
+                              text: ''
+                           },
+                           tooltips: {
+                              mode: 'index',
+                              intersect: false,
+                           },
+                           hover: {
+                              mode: 'nearest',
+                              intersect: true
+                           },
+                           scales: {
+                              xAxes: [{
+                                 display: true,
+                                 scaleLabel: {
+                                    display: false,
+                                    labelString: ''
+                                 }
+                              }],
+                              yAxes: [{
+                                 display: true,
+                                 scaleLabel: {
+                                    display: true,
+                                    labelString: 'Number of Respondents'
+                                 },
+                                 ticks: {
+                                    suggestedMin: 0, // minimum will be 0, unless there is a lower value.
+
+                                 }
+                              }]
+                           }
+                        }
+                     };
+                     var info = '<p class="info">Chart Info </p>';
+                     info += '<p class="info">Number of Responses: ' + 0 + '</p>';
+                     info += '<p class="info">Mean: ' + 0 + '</p>';
+                     info += '<p class="info">Median: ' + 0 + '</p>';
+                     info += '<p class="info">Mode: ' + 0 + '</p>';
+                     info += '<p class="info">Standard Deviation: ' + 0 + '</p>';
+                     $('#chart_info').html(info);
+                  }
+                  $(".fadeMe").hide();
+               },
+               error: function(errorThrown) {
+                  console.log(errorThrown);
+               }
+            });
+         });
+
+         $(".question").on('change', function() {
+            $('.segment').val('');
             var populateData = $("#populate_chart").serialize();
             //console.log(populateData);
             $.ajax({
-                url: ajaxurl,
-                type: 'POST',
-                data: {
-                    'chart_data': populateData,
-                    'action': 'populate_chart'
-                },
-                dataType: 'json',
-                success: function(data) {
-                    //alert(data);
-                    //$('#questions_display').html(data);
-
-                    myChart.destroy();
-                    myChart.config = [];
-                    var returned = data;
-                    if (returned.chart_type == "pie") {
-                        var sum = returned.values.reduce(add, 0);
-                        returned.values = returned.values.map(function(x) {
-                            return x / sum * 100;
-                        });
-                        var count = returned.values.length;
-                        var colorArray = getRandomColors(count);
-
-                        config = {
-                            type: returned.chart_type,
-                            data: {
-                                datasets: [{
-                                    data: returned.values,
-                                    backgroundColor: colorArray,
-                                    borderColor: colorArray,
-                                    label: 'Dataset 1'
-                                }],
-                                labels: returned.keys
-                            },
-                            options: {
-                                responsive: true,
-                                title: {
-                                    display: true,
-                                    text: chartTitle
-                                }
-                            }
-                        };
-                        //console.log(config);
-                    } else {
-
-                        config = {
-                            type: returned.chart_type,
-                            data: {
-                                labels: returned.keys,
-                                datasets: [{
-                                    //label: "Unfilled",
-                                    fill: false,
-                                    backgroundColor: '#ff0000',
-                                    borderColor: '#000000',
-                                    data: returned.values
-                                }]
-                            },
-                            options: {
-                                legend: {
-                                    display: false
-                                },
-                                responsive: true,
-                                title: {
-                                    display: true,
-                                    text: chartTitle
-                                },
-                                tooltips: {
-                                    mode: 'index',
-                                    intersect: false,
-                                },
-                                hover: {
-                                    mode: 'nearest',
-                                    intersect: true
-                                },
-                                scales: {
-                                    xAxes: [{
-                                        display: true,
-                                        scaleLabel: {
-                                            display: false,
-                                        }
-                                    }],
-                                    yAxes: [{
-                                        display: true,
-                                        scaleLabel: {
-                                            display: true,
-                                            labelString: 'Number of Respondents'
-                                        },
-                                        ticks: {
-                                            suggestedMin: 0,
-                                        }
-                                    }]
-                                }
-                            }
-                        };
-
-                    }
-                    //ctx = $("#canvas");
-                    myChart = new Chart(ctx, config);
-                },
-                error: function(errorThrown) {
-                    console.log(errorThrown);
-                }
+               url: ajaxurl,
+               type: 'POST',
+               data: {
+                  'chart_data': populateData,
+                  'action': 'populate_segments'
+               },
+               dataType: 'html',
+               success: function(segment_data) {
+                  $('#segments').html(segment_data);
+               },
+               error: function(errorThrown) {
+                  console.log(errorThrown);
+               }
             });
-        });
+         });
+      }
 
-
-    });
-
-
+   });
 
 })(jQuery);
 
 function add(a, b) {
-    return a + b;
+   return a + b;
 }
 
 function getPercentage(x, sum) {
-    return x / sum * 100 + "%";
+   return x / sum * 100 + "%";
 }
 
 function getRandomColors(count) {
-    var r;
-    var b;
-    var g;
-    var c;
-    var colorArray = [];
-    for (var i = 0; i < count; i++) {
-        r = Math.floor(Math.random() * 200);
-        g = Math.floor(Math.random() * 200);
-        b = Math.floor(Math.random() * 200);
-        c = 'rgba(' + r + ', ' + g + ', ' + b + ", 1" + ')';
-        colorArray.push(c.toString(16));
-    }
-    return colorArray;
+   var r;
+   var b;
+   var g;
+   var c;
+   var colorArray = [];
+   for (var i = 0; i < count; i++) {
+      r = Math.floor(Math.random() * 200);
+      g = Math.floor(Math.random() * 200);
+      b = Math.floor(Math.random() * 200);
+      c = 'rgba(' + r + ', ' + g + ', ' + b + ", 1" + ')';
+      colorArray.push(c.toString(16));
+   }
+   return colorArray;
 }

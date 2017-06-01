@@ -1,20 +1,15 @@
 <?php
 /**
- * The admin-specific functionality of the plugin.
+ * Imposts chart related data from csv
  *
- * @link       http://github.com/jbutland/js-data-visulization
+ *  @link              http://github.com/jbutland/js-data-visulization
  * @since      1.0.0
  *
+ *
  * @package    JS_Data_Visualization
- * @subpackage JS_Data_Visualization/admin/data-classes
+ * @subpackage JS_Data_Visualization/shared-files/data-classes
+ * @author     Jon Butland jonathan.butland@gmail.com
  */
- /**
-  * A class for importing data from a .csv.
-  *
-  * @package    JS_Data_Visualization
-  * @subpackage JS_Data_Visualization/admin/data-classes
-  * @author     Jon Butland jonathan.butland@gmail.com
-  */
 
 class JS_Data_Visualization_Import_Data
 {

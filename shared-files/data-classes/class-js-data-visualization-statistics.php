@@ -1,21 +1,15 @@
 <?php
 /**
- * The admin-specific functionality of the plugin.
+ * performs various statistical operations.
  *
- * @link       http://github.com/jbutland/js-data-visulization
+ *  @link              http://github.com/jbutland/js-data-visulization
  * @since      1.0.0
  *
+ *
  * @package    JS_Data_Visualization
- * @subpackage JS_Data_Visualization//admin/data-classes
+ * @subpackage JS_Data_Visualization/shared-files/data-classes
+ * @author     Jon Butland jonathan.butland@gmail.com
  */
- /**
-  * A class that performs a statistical functions passed by an array.
-  *
-  *
-  * @package    JS_Data_Visualization
-  * @subpackage JS_Data_Visualization/admin/data-classes
-  * @author     Jon Butland jonathan.butland@gmail.com
-  */
 
 class Process_Data_Functions {
 
