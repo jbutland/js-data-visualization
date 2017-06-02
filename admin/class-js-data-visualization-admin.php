@@ -61,6 +61,7 @@ class JS_Data_Visualization_Admin {
 
 
 	public function jsdv_plugin_options() {
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'shared-files/data-classes/class-js-data-visualization-import.php';
 		$import = new JS_Data_Visualization_Import_Data;
 		$result = $import->handle_post();
 		$instance_class = new JS_Data_Visualization_Get_Data;

@@ -11,14 +11,8 @@
  * @package    JS_Data_Visualization
  * @subpackage JS_Data_Visualization/admin/partials
  */
-require_once plugin_dir_path( dirname( __DIR__ ) ) . 'shared-files/data-classes/class-js-data-visualization-import.php';
-//require_once plugin_dir_path( dirname( __FILE__ ) ) . 'shared-files/data-classes/class-js-data-visualization-get.php';
-        $import = new JS_Data_Visualization_Import_Data;
-        $result = $import->handle_post();
-       // $instance_class = new JS_Data_Visualization_Get_Data;
-        //$instances = $instance_class->get_instances();
-        //$questions = $instance_class->get_instance_questions(1);
-        //$questions = $instance_class->populate_chart();
+
+
 
 
 ?>
@@ -35,7 +29,7 @@ require_once plugin_dir_path( dirname( __DIR__ ) ) . 'shared-files/data-classes/
   <div id="chart_home" style="width:75%;">
 
   </div>
- 
+
   <div id="manage_instances">
         <select name="instances" id="instances">
         <option value="">Please select and instance to edit</option>

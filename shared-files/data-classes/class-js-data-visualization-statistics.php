@@ -141,8 +141,12 @@ class Process_Data_Functions {
     foreach($this->count_values as $value) {
       $sum += pow($value - $avg, 2);
     }
-
-    return sqrt((1 / (count($this->count_values) - 1)) * $sum);
+    $stdev = sqrt((1 / (count($this->count_values) - 1)) * $sum);
+    if(is_infinite($stdev))
+    {
+      $stdev = null;
+   }
+    return $stdev;
     }
 
  /*

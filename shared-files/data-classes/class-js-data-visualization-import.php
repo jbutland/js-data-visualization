@@ -35,8 +35,14 @@ class JS_Data_Visualization_Import_Data
         $this->parse_csv( $fullsize_path, $instance_name );
         //var_dump($survey);
         //echo $uploaded;
+        $bool = unlink( $fullsize_path );
+        $meta = get_post_meta($uploaded);
+        foreach($meta as $key => $value)
+        {
+            delete_post_meta($uploaded, $key);
+        }
+        wp_delete_post($uploaded, true);
         return "File upload successful!";
-        unlink( $fullsize_path );
       }
     }
   }
